@@ -1,6 +1,7 @@
 package com.naichuan.seckill.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.naichuan.seckill.exception.GlobalException;
 import com.naichuan.seckill.mapper.UserMapper;
 import com.naichuan.seckill.pojo.User;
 import com.naichuan.seckill.service.IUserService;
@@ -39,10 +40,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 //        }
         User user = userMapper.selectById(mobile);
         if (null == user) {
-            return RespBean.error(RespBeanEnum.LOGIN_ERROR);
+//            return RespBean.error(RespBeanEnum.LOGIN_ERROR);
+            throw new GlobalException(RespBeanEnum.LOGIN_ERROR);
         }
         if (!MD5Util.fromPassToDBPass(password, user.getSalt()).equals(user.getPassword())) {
-            return RespBean.error(RespBeanEnum.LOGIN_ERROR);
+//            return RespBean.error(RespBeanEnum.LOGIN_ERROR);
+            throw new GlobalException(RespBeanEnum.LOGIN_ERROR);
         }
         return RespBean.success();
     }
