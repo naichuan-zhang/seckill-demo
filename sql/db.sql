@@ -40,6 +40,7 @@ CREATE TABLE `t_goods` (
 
 LOCK TABLES `t_goods` WRITE;
 /*!40000 ALTER TABLE `t_goods` DISABLE KEYS */;
+INSERT INTO `t_goods` (`id`, `goods_name`, `goods_title`, `goods_img`, `goods_detail`, `goods_price`, `goods_stock`) VALUES (1,'iPhone 12 64GB','iPhone 12','/img/iphone12.png','iPhone 12 64GB',6299.00,100),(2,'iPhone 12 PRO','iPhone 12 PRO','/img/iphone12pro.png','iPhone 12 PRO 128GB',9299.00,100);
 /*!40000 ALTER TABLE `t_goods` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -73,6 +74,59 @@ CREATE TABLE `t_order` (
 LOCK TABLES `t_order` WRITE;
 /*!40000 ALTER TABLE `t_order` DISABLE KEYS */;
 /*!40000 ALTER TABLE `t_order` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `t_seckill_goods`
+--
+
+DROP TABLE IF EXISTS `t_seckill_goods`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `t_seckill_goods` (
+                                   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '秒杀商品ID',
+                                   `goods_id` bigint(20) DEFAULT NULL COMMENT '商品ID',
+                                   `seckill_price` decimal(10,2) DEFAULT '0.00' COMMENT '秒杀价',
+                                   `stock_count` int(10) DEFAULT NULL COMMENT '库存数量',
+                                   `start_date` datetime DEFAULT NULL COMMENT '秒杀开始时间',
+                                   `end_date` datetime DEFAULT NULL COMMENT '秒杀结束时间',
+                                   PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `t_seckill_goods`
+--
+
+LOCK TABLES `t_seckill_goods` WRITE;
+/*!40000 ALTER TABLE `t_seckill_goods` DISABLE KEYS */;
+INSERT INTO `t_seckill_goods` (`id`, `goods_id`, `seckill_price`, `stock_count`, `start_date`, `end_date`) VALUES (1,1,629.00,10,'2020-11-01 08:00:00','2020-11-01 09:00:00'),(2,2,929.00,10,'2020-11-01 08:00:00','2020-11-01 09:00:00');
+/*!40000 ALTER TABLE `t_seckill_goods` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `t_seckill_order`
+--
+
+DROP TABLE IF EXISTS `t_seckill_order`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `t_seckill_order` (
+                                   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '秒杀订单ID',
+                                   `user_id` bigint(20) DEFAULT NULL COMMENT '用户ID',
+                                   `order_id` bigint(20) DEFAULT NULL COMMENT '订单ID',
+                                   `goods_id` bigint(20) DEFAULT NULL COMMENT '商品ID',
+                                   PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `t_seckill_order`
+--
+
+LOCK TABLES `t_seckill_order` WRITE;
+/*!40000 ALTER TABLE `t_seckill_order` DISABLE KEYS */;
+/*!40000 ALTER TABLE `t_seckill_order` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -113,4 +167,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-10-28 15:53:40
+-- Dump completed on 2021-10-28 16:07:29
