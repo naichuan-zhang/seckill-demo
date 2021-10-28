@@ -16,6 +16,20 @@ spring:
       connection-timeout: 30000
       # 测试链接是否可用的查询语句
       connection-test-query: SELECT 1
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 0
+    timeout: 10000ms
+    lettuce:
+      pool:
+        # 最大链接数，默认8
+        max-active: 8
+        # 最大链接阻塞等待时间
+        max-wait: 10000ms
+        # 最大空闲链接
+        max-idle: 200
+        min-idle: 5
 mybatis-plus:
   mapper-locations: classpath*:/mapper/*Mapper.xml
   type-aliases-package: com.naichuan.seckill.pojo
