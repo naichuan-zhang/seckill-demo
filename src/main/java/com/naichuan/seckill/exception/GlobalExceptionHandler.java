@@ -17,13 +17,16 @@ public class GlobalExceptionHandler {
     public RespBean exceptionHandler(Exception e) {
         if (e instanceof GlobalException) {
             GlobalException ex = (GlobalException) e;
+            e.printStackTrace();
             return RespBean.error(ex.getRespBeanEnum());
         } else if (e instanceof BindException) {
             BindException ex = (BindException) e;
             RespBean respBean = RespBean.error(RespBeanEnum.BINDING_ERROR);
             respBean.setMessage("参数校验异常：" + ex.getBindingResult().getAllErrors().get(0).getDefaultMessage());
+            e.printStackTrace();
             return respBean;
         }
+        e.printStackTrace();
         return RespBean.error(RespBeanEnum.ERROR);
     }
 }
