@@ -100,7 +100,7 @@ CREATE TABLE `t_seckill_goods` (
 
 LOCK TABLES `t_seckill_goods` WRITE;
 /*!40000 ALTER TABLE `t_seckill_goods` DISABLE KEYS */;
-INSERT INTO `t_seckill_goods` (`id`, `goods_id`, `seckill_price`, `stock_count`, `start_date`, `end_date`) VALUES (1,1,629.00,10,'2020-11-01 08:00:00','2020-11-01 09:00:00'),(2,2,929.00,10,'2020-11-01 08:00:00','2020-11-01 09:00:00');
+INSERT INTO `t_seckill_goods` (`id`, `goods_id`, `seckill_price`, `stock_count`, `start_date`, `end_date`) VALUES (1,1,629.00,10,'2021-10-29 16:00:00','2021-10-29 18:30:00'),(2,2,929.00,10,'2021-10-05 08:00:00','2021-10-05 09:00:00');
 /*!40000 ALTER TABLE `t_seckill_goods` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -155,6 +155,7 @@ CREATE TABLE `t_user` (
 
 LOCK TABLES `t_user` WRITE;
 /*!40000 ALTER TABLE `t_user` DISABLE KEYS */;
+INSERT INTO `t_user` (`id`, `nickname`, `password`, `salt`, `head`, `register_date`, `last_login_date`, `login_count`) VALUES (13111111111,'naichuan','6e0a7fe692684372437c9e508508990d','1a2b3c4d',NULL,'2021-10-29 14:20:23',NULL,0);
 /*!40000 ALTER TABLE `t_user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -167,4 +168,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-10-28 16:07:29
+-- Dump completed on 2021-10-29 17:00:30
