@@ -37,6 +37,12 @@
                 <span th:if="${secKillStatus eq 1}">秒杀进行中...</span>
                 <span th:if="${secKillStatus eq 2}">秒杀已结束</span>
             </td>
+            <td>
+                <form id="seckillForm" method="post" action="/seckill/doSeckill">
+                    <input type="hidden" name="goodsId" th:value="${goods.id}"/>
+                    <button class="btn btn-primary btn-block" type="submit" id="buyButton">立即秒杀</button>
+                </form>
+            </td>
         </tr>
         <tr>
             <td>商品原价</td>
@@ -59,9 +65,11 @@
     });
 
     function countDown() {
-        var remainSeconds = $('#remainSeconds').val();
+        var remainSeconds = Number($('#remainSeconds').val());
         var timeout;
         if (remainSeconds > 0) {
+            // 秒杀还未开始
+            $('#buyButton').attr("disabled", true);
             timeout = setTimeout(function () {
                 $('#countDown').text(remainSeconds - 1);
                 $('#remainSeconds').val(remainSeconds - 1);
@@ -69,11 +77,14 @@
             }, 1000);
         } else if (remainSeconds === 0) {
             // 秒杀进行中
+            $('#buyButton').attr("disabled", false);
             if (timeout) {
                 clearTimeout(timeout);
             }
             $('#seckillTip').html("秒杀进行中...");
         } else {
+            // 秒杀已结束
+            $('#buyButton').attr("disabled", true);
             $('#seckillTip').html("秒杀已结束");
         }
     }
