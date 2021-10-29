@@ -1,6 +1,8 @@
 package com.naichuan.seckill.controller;
 
 import com.naichuan.seckill.pojo.User;
+import com.naichuan.seckill.service.IGoodsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/goods")
 public class GoodsController {
 
+    @Autowired
+    private IGoodsService goodsService;
+
     /**
      * 商品列表页面 
      * @author 张乃川
@@ -22,6 +27,7 @@ public class GoodsController {
     @RequestMapping("/toList")
     public String toList(Model model, User user) {
         model.addAttribute("user", user);
+        model.addAttribute("goodsList", goodsService.findGoodsVo());
         return "goodsList";
     }
 
