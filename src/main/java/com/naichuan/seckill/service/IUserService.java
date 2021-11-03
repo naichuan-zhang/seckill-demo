@@ -37,4 +37,12 @@ public interface IUserService extends IService<User> {
      * @param response
      */
     User getUserByCookie(String userTicket, HttpServletRequest request, HttpServletResponse response);
+
+    /**
+     * 更新密码 
+     * @author 张乃川
+     * @date 2021/11/3 15:51
+     * @param 
+     */
+    RespBean updatePassword(String userTicket, String password, HttpServletRequest request, HttpServletResponse response);
 }
