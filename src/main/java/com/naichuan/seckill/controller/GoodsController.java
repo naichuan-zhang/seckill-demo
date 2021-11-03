@@ -2,7 +2,9 @@ package com.naichuan.seckill.controller;
 
 import com.naichuan.seckill.pojo.User;
 import com.naichuan.seckill.service.IGoodsService;
+import com.naichuan.seckill.vo.DetailVo;
 import com.naichuan.seckill.vo.GoodsVo;
+import com.naichuan.seckill.vo.RespBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -64,14 +66,9 @@ public class GoodsController {
 //        return "goodsList";
     }
 
-    @RequestMapping(value = "/toDetail/{goodsId}", produces = "text/html;charset=utf-8")
+    @RequestMapping("/detail/{goodsId}")
     @ResponseBody
-    public String toDetail(@PathVariable("goodsId") Long goodsId, Model model, User user, HttpServletRequest request, HttpServletResponse response) {
-        ValueOperations valueOptions = redisTemplate.opsForValue();
-        String html = (String) valueOptions.get("goodsDetail:" + goodsId);
-        if (!StringUtils.isEmpty(html)) {
-            return html;
-        }
+    public RespBean toDetail(@PathVariable("goodsId") Long goodsId, Model model, User user) {
         model.addAttribute("user", user);
         GoodsVo goodsVo = goodsService.findGoodsByGoodsId(goodsId);
         Date startDate = goodsVo.getStartDate();
@@ -93,15 +90,52 @@ public class GoodsController {
             secKillStatus = 1;
             remainSeconds = 0;
         }
-        model.addAttribute("remainSeconds", remainSeconds);
-        model.addAttribute("secKillStatus", secKillStatus);
-        model.addAttribute("goods", goodsVo);
-        WebContext webContext = new WebContext(request, response, request.getServletContext(), request.getLocale(), model.asMap());
-        html = viewResolver.getTemplateEngine().process("goodsDetail", webContext);
-        if (!StringUtils.isEmpty(html)) {
-            valueOptions.set("goodsDetail:" + goodsId, html, 60, TimeUnit.SECONDS);
-        }
-        return html;
-        //        return "goodsDetail";
+        DetailVo detailVo = new DetailVo();
+        detailVo.setUser(user);
+        detailVo.setGoodsVo(goodsVo);
+        detailVo.setSecKillStatus(secKillStatus);
+        detailVo.setRemainSeconds(remainSeconds);
+        return RespBean.success(detailVo);
     }
+
+//    @RequestMapping(value = "/toDetail/{goodsId}", produces = "text/html;charset=utf-8")
+//    @ResponseBody
+//    public String toDetail(@PathVariable("goodsId") Long goodsId, Model model, User user, HttpServletRequest request, HttpServletResponse response) {
+//        ValueOperations valueOptions = redisTemplate.opsForValue();
+//        String html = (String) valueOptions.get("goodsDetail:" + goodsId);
+//        if (!StringUtils.isEmpty(html)) {
+//            return html;
+//        }
+//        model.addAttribute("user", user);
+//        GoodsVo goodsVo = goodsService.findGoodsByGoodsId(goodsId);
+//        Date startDate = goodsVo.getStartDate();
+//        Date endDate = goodsVo.getEndDate();
+//        Date nowDate = new Date();
+//        // 秒杀状态
+//        int secKillStatus;
+//        // 秒杀倒计时
+//        int remainSeconds;
+//        if (nowDate.before(startDate)) {
+//            // 秒杀未开始
+//            secKillStatus = 0;
+//            remainSeconds = ((int) ((startDate.getTime() - nowDate.getTime()) / 1000));
+//        } else if (nowDate.after(endDate)) {
+//            // 秒杀已结束
+//            secKillStatus = 2;
+//            remainSeconds = -1;
+//        } else {
+//            secKillStatus = 1;
+//            remainSeconds = 0;
+//        }
+//        model.addAttribute("remainSeconds", remainSeconds);
+//        model.addAttribute("secKillStatus", secKillStatus);
+//        model.addAttribute("goods", goodsVo);
+//        WebContext webContext = new WebContext(request, response, request.getServletContext(), request.getLocale(), model.asMap());
+//        html = viewResolver.getTemplateEngine().process("goodsDetail", webContext);
+//        if (!StringUtils.isEmpty(html)) {
+//            valueOptions.set("goodsDetail:" + goodsId, html, 60, TimeUnit.SECONDS);
+//        }
+//        return html;
+//        //        return "goodsDetail";
+//    }
 }
