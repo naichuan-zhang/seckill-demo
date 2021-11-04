@@ -80,7 +80,7 @@
                 if (data.code === 200) {
                     window.location.href = '/static/orderDetail.htm?orderId=' + data.data.id;
                 } else {
-                    layer.msg("ke客户端请求错误！")
+                    layer.msg(data.message);
                 }
             },
             error: function () {

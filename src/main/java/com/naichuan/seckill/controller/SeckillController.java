@@ -11,6 +11,7 @@ import com.naichuan.seckill.vo.GoodsVo;
 import com.naichuan.seckill.vo.RespBean;
 import com.naichuan.seckill.vo.RespBeanEnum;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,6 +35,9 @@ public class SeckillController {
     @Autowired
     private IOrderService orderService;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
     /**
      * 秒杀
      * @author 张乃川
@@ -54,8 +58,9 @@ public class SeckillController {
             return RespBean.error(RespBeanEnum.EMPTY_STOCK);
         }
         // 判断是否重复抢购
-        SeckillOrder seckillOrder = seckillOrderService.getOne(new QueryWrapper<SeckillOrder>()
-                .eq("user_id", user.getId()).eq("goods_id", goodsId));
+//        SeckillOrder seckillOrder = seckillOrderService.getOne(new QueryWrapper<SeckillOrder>()
+//                .eq("user_id", user.getId()).eq("goods_id", goodsId));
+        SeckillOrder seckillOrder = (SeckillOrder) redisTemplate.opsForValue().get("order:" + user.getId() + ":" + goodsId);
         if (seckillOrder != null) {
             model.addAttribute("errmsg", RespBeanEnum.REPEATE_ERROR.getMessage());
             return RespBean.error(RespBeanEnum.REPEATE_ERROR);
