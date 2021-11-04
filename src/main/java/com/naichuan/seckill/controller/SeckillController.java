@@ -17,6 +17,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +49,9 @@ public class SeckillController implements InitializingBean {
 
     @Autowired
     private RedisTemplate redisTemplate;
+
+    @Autowired
+    private RedisScript<Long> script;
 
     @Autowired
     private MqSender mqSender;
@@ -76,7 +81,9 @@ public class SeckillController implements InitializingBean {
             return RespBean.error(RespBeanEnum.EMPTY_STOCK);
         }
         // 预减库存
-        Long stock = valueOperations.decrement("seckillGoods:" + goodsId);
+//        Long stock = valueOperations.decrement("seckillGoods:" + goodsId);
+        Long stock = (Long) redisTemplate.execute(script, Collections.singletonList("seckillGoods:" + goodsId),
+                Collections.emptyList());
         if (stock < 0) {
             emptyStockMap.put(goodsId, true);
             valueOperations.increment("seckillGoods:" + goodsId);
@@ -104,6 +111,22 @@ public class SeckillController implements InitializingBean {
         Order order = orderService.seckill(user, goodsVo);
         return RespBean.success(order);
          */
+    }
+
+    /**
+     * 获取秒杀结果
+     * @author 张乃川
+     * @date 2021/11/4 10:36
+     * @param
+     */
+    @RequestMapping(value = "/getResult", method = RequestMethod.GET)
+    @ResponseBody
+    public RespBean getResult(User user, Long goodsId) {
+        if (user == null) {
+            return RespBean.error(RespBeanEnum.SESSION_ERROR);
+        }
+        Long orderId = seckillOrderService.getResult(user, goodsId);
+        return RespBean.success(orderId);
     }
 
     /**
