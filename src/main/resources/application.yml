@@ -43,6 +43,30 @@ spring:
         # 最大空闲链接
         max-idle: 200
         min-idle: 5
+  rabbitmq:
+    host: localhost
+    username: guest
+    password: guest
+    virtual-host: /
+    port: 5672
+    listener:
+      simple:
+        # 消费者最小数量
+        concurrency: 10
+        max-concurrency: 10
+        # 限制消费者每次只处理一条消息，处理完再处理下一条消息
+        prefetch: 1
+        auto-startup: true
+        # 被拒绝时重新进入队列
+        default-requeue-rejected: true
+    template:
+      retry:
+        enabled: true
+        initial-interval: 1000ms
+        max-attempts: 3
+        max-interval: 10000ms
+        # 重试的间隔乘数，比如配2.0，第一次等10s，第二次等20s，第三次等40s...
+        multiplier: 1
 mybatis-plus:
   mapper-locations: classpath*:/mapper/*Mapper.xml
   type-aliases-package: com.naichuan.seckill.pojo
